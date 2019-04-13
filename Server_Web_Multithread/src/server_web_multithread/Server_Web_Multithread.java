@@ -32,7 +32,7 @@ public final class Server_Web_Multithread {
 		//	Process HTTP service requestes in an infinite loop.
 		while(true){
 			System.out.println("Server openned.");
-			System.out.println(new Date());
+			System.out.println(new Date() + "\n");
 			
 			//	Listen for a TCP connection request
 			socketClient = server.accept();
