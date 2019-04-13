@@ -13,26 +13,38 @@ import java.util.*;
  *
  * @author paulo
  */
-public class Server_Web_Multithread {
+public final class Server_Web_Multithread {
 
+	//	Set the port number
+	static final int port = 6789;
+	static ServerSocket server;
+	static Socket socketClient;
+	
+	
 	/**
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) throws IOException {
 		
-		//	Set the port number
-		int port = 6789;
-		
 		//	Establish the listen socket
-		ServerSocket server = new ServerSocket(12345);
-		Socket client = server.accept();
+		server = new ServerSocket(port);
 		
 		//	Process HTTP service requestes in an infinite loop.
 		while(true){
+			System.out.println("Server openned.");
+			System.out.println(new Date());
+			
 			//	Listen for a TCP connection request
+			socketClient = server.accept();
+			
+			//	HTTP request
+			HttpRequest request = new HttpRequest(socketClient);
+			
+			//	Create new Thread to process the request
+			Thread thread = new Thread(request);
+			thread.start();
+			
 		}
-		
-		
 		
 		
 	}
