@@ -76,6 +76,8 @@ final class HttpRequest implements Runnable {
 		try {
 			fis = new FileInputStream(fileName);
 		} catch (Exception e) {
+			fileName = "./notfound.html";
+			fis = new FileInputStream(fileName);
 			fileExists = false;
 		}
 		
@@ -85,13 +87,13 @@ final class HttpRequest implements Runnable {
 		String entityBody = null;
 		
 		if(fileExists){
-			statusLine = "The file exists!";
+			statusLine = "HTTP/1.0 200 OK";
 			contentTypeLine = "Content-type: " + contentType(fileName) + CRLF;
 		}
 		else{
-			statusLine = "404 Not Found.";
-			contentTypeLine = "404 Not Found!";
-			entityBody = "<HTML><HEAD><TITLE>Not found.</TITLE></HEAD><BODY>Not found.</BODY></HTML>";
+			statusLine = "HTTP/1.0 404 NOT FOUND";
+			contentTypeLine = "Content-type: " + contentType(fileName) + CRLF;
+			//entityBody = "<HTML><HEAD><TITLE>Not found1.</TITLE></HEAD><BODY>Not found2.</BODY></HTML>";
 		}
 		
 		//	Send the status line
@@ -104,14 +106,9 @@ final class HttpRequest implements Runnable {
 		os.writeBytes(CRLF);
 		
 		//	Send the entity body
-		if(fileExists){
-			sendBytes(fis, os);
-			fis.close();
-		}
-		else{
-			os.writeBytes(entityBody);
-		}
-		
+		sendBytes(fis, os);
+		fis.close();
+			
 		//Close stream and socket
 		os.close();
 		br.close();
@@ -121,6 +118,12 @@ final class HttpRequest implements Runnable {
 	private String contentType(String fileName) {
 		if (fileName.endsWith(".html") || fileName.endsWith(".htm")) {
 			return "text/html";
+		}
+		if (fileName.endsWith(".gif")) {
+			return "image/gif";
+		}
+		if (fileName.endsWith(".jpeg")) {
+			return "image/jpeg";
 		} else {
 			return "application/octet-stream";
 		}
