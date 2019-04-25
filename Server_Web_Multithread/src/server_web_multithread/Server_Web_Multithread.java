@@ -43,7 +43,6 @@ public final class Server_Web_Multithread {
 			//	Create new Thread to process the request
 			Thread thread = new Thread(request);
 			thread.start();
-			
 		}
 	}
 }
